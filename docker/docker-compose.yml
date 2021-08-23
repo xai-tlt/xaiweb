@@ -1,0 +1,44 @@
+version: "3.5"
+
+services:
+  template-wordpress:
+    image: reg.xailabs.com/xailabs/wordpress:latest
+    build:
+      context: ../
+      dockerfile: docker/wordpress/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./wordpress/uploads:/var/www/html/wp-content/uploads
+      - ./wordpress/php:/var/log/php
+      - ./wordpress/wp-config-local.php:/var/www/html/wp-config.php
+      - ./wordpress/w3tc-config:/var/www/html/wp-content/w3tc-config
+      - ../wp-content/themes:/var/www/html/wp-content/themes
+      - ./wordpress/99-custom-dev.ini:/usr/local/etc/php/conf.d/99-custom.ini
+      - ./wordpress/.htaccess:/var/www/html/.htaccess
+    ports:
+      - "1333:80"
+
+  template-postfix:
+    image: reg.xailabs.com/xailabs/postfix:latest
+    environment:
+      - maildomain=xailabs.dev
+      - smtp_user=mailer:mailer
+    restart: unless-stopped
+    volumes:
+      - ./postfix/mail:/var/log/mail
+      - ./postfix/header_checks:/etc/postfix/header_checks
+
+  template-mysql:
+    image: reg.xailabs.com/xailabs/mysql:5.7
+    restart: unless-stopped
+    volumes:
+      - ./mysql/var_lib_mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress-local
+    ports:
+      - "1334:3306"
+
+networks:
+  default:
+    name: template-network

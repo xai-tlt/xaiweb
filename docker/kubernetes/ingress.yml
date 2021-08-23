@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: template-wordpress
+  namespace: xaiweb-2021
+spec:
+  rules:
+    - host: xaiweb-2021.xailabs.dev
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: template-wordpress
+              servicePort: 80

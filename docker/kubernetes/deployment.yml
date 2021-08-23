@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-wordpress
+  namespace: xaiweb-2021
+spec:
+  selector:
+    matchLabels:
+      app: template-wordpress
+  template:
+    metadata:
+      labels:
+        app: template-wordpress
+    spec:
+      initContainers:
+        - name: volume-prewarming
+          image: busybox
+          command: ["sh", "-c", "chown -R 33:33 /tmp/uploads"]
+          volumeMounts:
+            - mountPath: "/tmp/uploads"
+              name: "glusterfsvol"
+              subPath: "template/uploads"
+      containers:
+        - name: template-wordpress
+          image: reg.xailabs.com/xaiweb-2021/wordpress:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: "/var/www/html/wp-content/uploads"
+              name: "glusterfsvol"
+              subPath: "template/uploads"
+            - name: template-wp-config
+              mountPath: /var/www/html/wp-config.php
+              subPath: wp-config.php
+              readOnly: true
+      imagePullSecrets:
+        - name: xairegcred
+      volumes:
+        - name: template-wp-config
+          secret:
+            secretName: template-wp-config
+            items:
+              - key: wp-config-stage.php
+                path: wp-config.php
+        - name: "glusterfsvol"
+          glusterfs:
+            endpoints: "glusterfs-cluster"
+            path: "gv6"
+            readOnly: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-mysql
+  namespace: xaiweb-2021
+spec:
+  selector:
+    matchLabels:
+      app: template-mysql
+  template:
+    metadata:
+      labels:
+        app: template-mysql
+    spec:
+      containers:
+        - name: template-mysql
+          image: reg.xailabs.com/xailabs/mysql:5
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: "glusterfsvol"
+              subPath: "xaiweb-2021/mysql"
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "Ezcwz4KFWw4wb72v"
+            - name: MYSQL_DATABASE
+              value: "template-wordpress"
+      imagePullSecrets:
+        - name: xairegcred
+      volumes:
+        - name: "glusterfsvol"
+          glusterfs:
+            endpoints: "glusterfs-cluster"
+            path: "gv6"
+            readOnly: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-postfix
+  namespace: xaiweb-2021
+spec:
+  selector:
+    matchLabels:
+      app: template-postfix
+  template:
+    metadata:
+      labels:
+        app: template-postfix
+    spec:
+      containers:
+        - name: template-postfix
+          image: reg.xailabs.com/xailabs/postfix:latest
+          ports:
+            - containerPort: 25
+          volumeMounts:
+            - mountPath: "/var/log/mail"
+              name: "glusterfsvol"
+              subPath: "template/mail"
+          env:
+            - name: smtp_user
+              value: "mailer:86faqEbdqPzjBZh6"
+            - name: maildomain
+              value: "xailabs.dev"
+      imagePullSecrets:
+        - name: xairegcred
+      volumes:
+        - name: "glusterfsvol"
+          glusterfs:
+            endpoints: "glusterfs-cluster"
+            path: "gv6"
+            readOnly: false

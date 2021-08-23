@@ -1,0 +1,9 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: xairegcred
+  namespace: xaiweb-2021
+data:
+  .dockerconfigjson: >-
+    eyJhdXRocyI6eyJyZWcueGFpbGFicy5jb20iOnsidXNlcm5hbWUiOiJqZW5raW5zIiwicGFzc3dvcmQiOiJTTnZyYnhJOTVqaXlqY3ZvTDZXViIsImF1dGgiOiJhbVZ1YTJsdWN6cFRUblp5WW5oSk9UVnFhWGxxWTNadlREWlhWZz09In19fQ==
+type: kubernetes.io/dockerconfigjson

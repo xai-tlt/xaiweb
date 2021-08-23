@@ -1,0 +1,85 @@
+copy from harbour the image
+
+paste and set it up
+
+testareal = harbor project
+
+docker tag SOURCE_IMAGE[:TAG] reg.xailabs.com/testareal/IMAGE[:TAG]
+
+docker tag reg.xailabs.com/xailabs/wordpress:latest reg.xailabs.com/testareal/wordpress:latest
+
+(docker ps)
+
+docker push reg.xailabs.com/testareal/IMAGE[:TAG]
+
+docker push reg.xailabs.com/testareal/wordpress:latest
+
+
+
+deployment.yml
+
+line 25 testareal/wordpress
+     containers:
+        - name: template-wordpress
+          image: reg.xailabs.com/testareal/wordpress:latest
+
+
+
+(copy config in root .kube, download file)
+
+select the context
+
+kubectl config use-context xailabs-dev
+
+kubectl apply -f namespace.yml 
+
+kubectl config set-context xailabs-dev --namespace wordpress-template
+
+kubectl config use-context xailabs-dev
+
+kubectl apply -f glusterfs.yml 
+
+kubectl apply -f deployment.yml 
+
+kubectl apply -f service.yml 
+
+kubectl apply -f ingress.yml 
+
+ kubectl get all
+
+(problems?)
+
+(kubectl logs template-wordpress-c7444b7dd-czzwf)
+
+kubectl describe pods template-wordpress ( check errors)
+
+kubectl create secret generic template-wp-config  --from-file=../wordpress/wp-config-stage.php
+
+
+more errors?
+
+kubectl rollout restart deployment/template-wordpress
+
+add credentials
+
+kubectl apply -f xairegcred.yml 
+
+another issue? check logs!
+
+fucked up db? check and recreate!
+kubectl create secret generic template-wp-config  --from-file=../wordpress/wp-config-stage.php
+
+kubectl rollout restart deployment/template-wordpress
+
+kubectl describe pods template-wordpress-866898c695-t8d7v
+
+
+wanna check the db?
+
+kubectl port-forward template-mysql-5475d474ff-dn6j5 3306:3306
+kubectl delete secret template-wp-config
+kubectl create secret generic template-wp-config  --from-file=../wordpress/wp-config-stage.php
+
+
+
+

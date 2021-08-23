@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: xaiweb-2021
+  labels:
+    name: xaiweb-2021
