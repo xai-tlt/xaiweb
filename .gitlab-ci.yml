@@ -5,7 +5,7 @@ build-job:
   script:
     - docker-compose up -d
 
-build-job1:
-  stage: deployment
+build-job1: 
+  stage: deployment #musste build sein will aber noch nicht testen solange keine stage umgebung vorhanden ist 
   script:
     - kubectl apply -f deployment.yml
