@@ -23,6 +23,13 @@ spec:
       containers:
         - name: template-wordpress
           image: reg.xailabs.com/xaiweb-2021/wordpress:latest
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           ports:
             - containerPort: 80
           volumeMounts:
@@ -65,6 +72,13 @@ spec:
       containers:
         - name: template-mysql
           image: reg.xailabs.com/xailabs/mysql:5
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           ports:
             - containerPort: 3306
           volumeMounts:
@@ -102,6 +116,13 @@ spec:
       containers:
         - name: template-postfix
           image: reg.xailabs.com/xailabs/postfix:latest
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           ports:
             - containerPort: 25
           volumeMounts:

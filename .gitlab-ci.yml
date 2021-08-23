@@ -1,0 +1,11 @@
+
+
+build-job:
+  stage: build
+  script:
+    - docker-compose up -d
+
+build-job1:
+  stage: deployment
+  script:
+    - kubectl apply -f deployment.yml
