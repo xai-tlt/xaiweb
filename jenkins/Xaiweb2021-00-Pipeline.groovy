@@ -26,7 +26,7 @@ pipeline{
         }
         stage ('Build docker container'){
             steps {
-                build job: '../Vivantes-01-Build-docker-container/' + env.BRANCH_NAME, parameters:[
+                build job: '../Xaiweb2021-01-Build-docker-container/' + env.BRANCH_NAME, parameters:[
                     string(name: 'RELEASE_VERSION', value: params.RELEASE_VERSION),
                     booleanParam(name: 'NO_CACHE', value: params.NO_CACHE),
                     booleanParam(name: 'IS_LATEST', value: params.IS_LATEST)
@@ -34,10 +34,10 @@ pipeline{
                 echo 'Finishing build docker container'
             }
         }
-        stage ('Deploy stage'){
+        stage ('Deploy Live'){
             steps{
-                build job: '../Vivantes-02-Deploy-stage/' + env.BRANCH_NAME
-                echo 'Finishing Deploy stage'
+                build job: '../Xaiweb2021-02-Deploy-live/' + env.BRANCH_NAME
+                echo 'Finishing Deploy Live'
             }
         }
     }

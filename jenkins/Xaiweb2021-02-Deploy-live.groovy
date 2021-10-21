@@ -13,10 +13,10 @@ pipeline{
                     echo 'Checkout stack'
                     sshagent(['36ed4c54-968c-433a-b476-4d2a36b67c71']) {
                         sh script:'''
-                            ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@192.168.70.160 <<EOF
-                                kubectl rollout restart deployment vivantes-wordpress --namespace=blumberry --insecure-skip-tls-verify
+                            sshpass -p p3EXfnVWeVhLfLCqj7wA ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@116.203.138.20 <<EOF
+                                kubectl rollout restart deployment template-wordpress --namespace=xaiweb-2021 --insecure-skip-tls-verify
                                 sleep 5
-                                kubectl get all --namespace=blumberry
+                                kubectl get all --namespace=xaiweb-2021 
 EOF'''
                     }
                 }

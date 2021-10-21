@@ -37,11 +37,11 @@ pipeline{
                     else
                         docker-compose build
                     fi
-                    docker tag  reg.xailabs.com/blumberry/vivantes-wordpress:latest reg.xailabs.com/blumberry/vivantes-wordpress:${RELEASE_VERSION}
-                    docker push reg.xailabs.com/blumberry/vivantes-wordpress:${RELEASE_VERSION}
+                    docker tag  reg.xailabs.com/xaiweb-2021/wordpress:latest reg.xailabs.com/xaiweb-2021/wordpress:${RELEASE_VERSION}
+                    docker push reg.xailabs.com/xaiweb-2021/wordpress:${RELEASE_VERSION}
 
                     if [ "$IS_LATEST" = true -a ! "$RELEASE_VERSION" = "latest" ] ; then
-                        docker push reg.xailabs.com/blumberry/vivantes-wordpress:latest
+                        docker push reg.xailabs.com/xaiweb-2021/wordpress:latest
                     fi
                     '''
                 }
